@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "159561093754",
+    "project_id": "memo-sphere",
+    "storage_bucket": "memo-sphere.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:159561093754:android:cc2fdd236d921173c1e1c3",
+        "android_client_info": {
+          "package_name": "com.kharedji.memosphere"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFNyPwLomHc-BPQ2tCy9BWDq6ql64tF3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
