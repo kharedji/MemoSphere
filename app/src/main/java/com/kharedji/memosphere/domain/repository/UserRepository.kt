@@ -10,5 +10,6 @@ interface UserRepository {
     val auth: FirebaseAuth
 
     suspend fun signUpUser(email: String, password: String): Flow<State<AuthResult>>
+    suspend fun signInUser(email: String, password: String): Flow<State<AuthResult>>
   
 }
