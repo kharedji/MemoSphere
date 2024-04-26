@@ -72,10 +72,10 @@ fun SignUpScreen(
     uiState?.value?.data?.let {
         navController?.apply{
             navigate(Screen.Main.route).apply {
-               /* popBackStack(
-                    route = Screen.SignUp.route,
-                    inclusive = false
-                )*/
+//                popBackStack(
+//                    route = Screen.SignUp.route,
+//                    inclusive = false
+//                )
             }
         }
         viewModel.resetUiState()

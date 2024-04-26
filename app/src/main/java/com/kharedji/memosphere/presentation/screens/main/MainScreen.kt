@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LeadingIconTab
 import androidx.compose.material3.MaterialTheme
@@ -24,11 +21,16 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.kharedji.memosphere.presentation.screens.home.HomeScreen
-import com.kharedji.memosphere.presentation.screens.profile.ProfileScreen
+import com.kharedji.memosphere.R
+import com.kharedji.memosphere.presentation.screens.profile.BlogsScreen
+import com.kharedji.memosphere.presentation.screens.note.NotesScreen
+import com.kharedji.memosphere.presentation.screens.note.NotesViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -46,8 +48,8 @@ fun MainScreen(
 
     val scope = rememberCoroutineScope()
     val tabData = listOf(
-        "Home" to Icons.Filled.Home,
-        "Profile" to Icons.Filled.Person
+        "Blogs" to R.drawable.ic_feed,
+        "Notes" to R.drawable.ic_note
     )
 
     BackHandler {
@@ -81,7 +83,7 @@ fun MainScreen(
         ) {
             tabData.forEachIndexed { index, (title, icon) ->
                 LeadingIconTab(
-                    icon = { Icon(imageVector = icon, contentDescription = null) },
+                    icon = { Icon(imageVector = ImageVector.vectorResource(id = icon), contentDescription = null) },
                     text = { /*Text(title)*/ },
                     selected = pagerState.currentPage == index,
                     onClick = {
@@ -92,6 +94,7 @@ fun MainScreen(
                 )
             }
         }
+        val notesViewModel: NotesViewModel = hiltViewModel()
 
         HorizontalPager(
             state = pagerState,
@@ -99,8 +102,8 @@ fun MainScreen(
                 .fillMaxSize()
         ) { page ->
             when (page) {
-                0 -> HomeScreen(navController = navController)
-                1 -> ProfileScreen(navController = navController)
+                0 -> BlogsScreen(navController = navController)
+                1 -> NotesScreen(navController = navController, notesViewModel)
             }
         }
     }
