@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kharedji.memosphere.domain.models.notes.Note
-import com.kharedji.memosphere.domain.use_case.NoteUseCases
+import com.kharedji.memosphere.domain.use_case.notes.NoteUseCases
 import com.kharedji.memosphere.domain.utils.NoteOrder
 import com.kharedji.memosphere.domain.utils.OrderType
 import dagger.hilt.android.lifecycle.HiltViewModel

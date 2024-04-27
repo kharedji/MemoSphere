@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Settings
@@ -30,13 +31,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.kharedji.memosphere.R
 import com.kharedji.memosphere.navigation.Screen
 import com.kharedji.memosphere.presentation.screens.signin.view_models.SignInViewModel
+import com.kharedji.memosphere.presentation.screens.signup.components.RegisterOutlinedText
 
 @Composable
 fun SignInScreen(
@@ -58,6 +65,10 @@ fun SignInScreen(
     }
 
     var isPasswordValid by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var showPassword by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -86,38 +97,46 @@ fun SignInScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        TextField(
-            label = {
-                Text(text = "Email")
+        RegisterOutlinedText(
+            value = email,
+            onValueChanged = {
+                email = it
             },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
+            label = { Text(text = "Email") },
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Email, contentDescription = "email")
             },
-            value = email,
-            placeholder = {
-                Text(text = "Email")
-            },
-            onValueChange = {
-                email = it
-            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        TextField(
-            label = {
-                Text(text = "Password")
-            },
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Settings, contentDescription = "password")
-            },
+        RegisterOutlinedText(
             value = password,
-            placeholder = {
-                Text(text = "Password")
-            },
-            onValueChange = {
+            onValueChanged = {
                 password = it
-            }
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next
+            ),
+            label = { Text(text = "Password") },
+            leadingIcon = {
+                Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_password), contentDescription = "password")
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_eye),
+                    contentDescription = "show password",
+                    modifier = Modifier.clickable {
+                        showPassword = !showPassword
+                    }
+                )
+            },
+            applyVisualTransformation = !showPassword
         )
 
         Spacer(modifier = Modifier.height(20.dp))

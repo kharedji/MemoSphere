@@ -2,16 +2,20 @@ package com.kharedji.memosphere.di
 
 import android.app.Application
 import androidx.room.Room
-import com.kharedji.memosphere.data.data_source.NoteDatabase
+import com.kharedji.memosphere.data.data_source.notes.NoteDatabase
+import com.kharedji.memosphere.data.data_source.user.UserDatabase
 import com.kharedji.memosphere.data.repository.NoteRepositoryImpl
 import com.kharedji.memosphere.data.repository.UserRepositoryImpl
 import com.kharedji.memosphere.domain.repository.NoteRepository
 import com.kharedji.memosphere.domain.repository.UserRepository
-import com.kharedji.memosphere.domain.use_case.AddNote
-import com.kharedji.memosphere.domain.use_case.DeleteNote
-import com.kharedji.memosphere.domain.use_case.GetNote
-import com.kharedji.memosphere.domain.use_case.GetNotes
-import com.kharedji.memosphere.domain.use_case.NoteUseCases
+import com.kharedji.memosphere.domain.use_case.notes.AddNote
+import com.kharedji.memosphere.domain.use_case.notes.DeleteNote
+import com.kharedji.memosphere.domain.use_case.notes.GetNote
+import com.kharedji.memosphere.domain.use_case.notes.GetNotes
+import com.kharedji.memosphere.domain.use_case.notes.NoteUseCases
+import com.kharedji.memosphere.domain.use_case.user.AddUser
+import com.kharedji.memosphere.domain.use_case.user.AddUserToFirestore
+import com.kharedji.memosphere.domain.use_case.user.UserUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,7 +54,28 @@ class AppModule {
     }
 
     @Provides
-    fun provideSignUpRepository(): UserRepository {
-        return UserRepositoryImpl()
+    @Singleton
+    fun provideUserDataBase(app: Application): UserDatabase {
+        return Room.databaseBuilder(
+            app,
+            UserDatabase::class.java,
+            UserDatabase.DATABASE_NAME
+        ).build()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(db: UserDatabase): UserRepository {
+        return UserRepositoryImpl(db.userDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserUseCases(repository: UserRepository): UserUseCases {
+        return UserUseCases(
+            addUser = AddUser(repository),
+            addUserToFirestore = AddUserToFirestore(repository)
+        )
     }
 }

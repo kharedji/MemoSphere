@@ -1,6 +1,6 @@
 package com.kharedji.memosphere.data.repository
 
-import com.kharedji.memosphere.data.data_source.NoteDao
+import com.kharedji.memosphere.data.data_source.notes.NoteDao
 import com.kharedji.memosphere.domain.models.notes.Note
 import com.kharedji.memosphere.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow

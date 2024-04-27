@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kharedji.memosphere.R
-import com.kharedji.memosphere.presentation.screens.profile.BlogsScreen
+import com.kharedji.memosphere.presentation.screens.blog.BlogsScreen
 import com.kharedji.memosphere.presentation.screens.note.NotesScreen
 import com.kharedji.memosphere.presentation.screens.note.NotesViewModel
 import kotlinx.coroutines.launch

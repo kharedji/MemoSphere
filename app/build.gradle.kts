@@ -82,6 +82,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.analytics)
     implementation(libs.auth)
+    implementation(libs.firestore)
 
     //Hilt
     implementation(libs.hilt)
@@ -92,6 +93,9 @@ dependencies {
     implementation(libs.android.room)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+
+    //Image Picker
+    implementation(libs.imagePicker)
 }
 
 hilt {

@@ -47,6 +47,8 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase"}
 analytics = { group = "com.google.firebase", name = "firebase-analytics"}
 auth = { group = "com.google.firebase", name = "firebase-auth"}
+firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx"}
+imagePicker = { group = "com.github.dhaval2404", name = "imagepicker", version = "2.1" }
 
 
 [plugins]

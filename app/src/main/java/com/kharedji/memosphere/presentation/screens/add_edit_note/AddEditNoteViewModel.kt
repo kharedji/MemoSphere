@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kharedji.memosphere.domain.models.notes.InvalidNoteException
 import com.kharedji.memosphere.domain.models.notes.Note
-import com.kharedji.memosphere.domain.use_case.NoteUseCases
+import com.kharedji.memosphere.domain.use_case.notes.NoteUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
