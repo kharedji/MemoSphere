@@ -78,6 +78,9 @@ fun SignInScreen(
     // was processed successfully and the account has been created.
     // Therefore the NavController can route to the MainScreen.
     uiState?.value?.data?.let {
+        it.user?.uid?.let { uid ->
+            viewModel.getUserFromFirestore(uid)
+        }
         navController?.apply {
             navigate(Screen.Main.route)
                 /*.also {
@@ -90,76 +93,88 @@ fun SignInScreen(
         viewModel.resetUiState()
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues = paddingValues),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        contentAlignment = Alignment.Center
     ) {
-        RegisterOutlinedText(
-            value = email,
-            onValueChanged = {
-                email = it
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            ),
-            label = { Text(text = "Email") },
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Email, contentDescription = "email")
-            },
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            RegisterOutlinedText(
+                value = email,
+                onValueChanged = {
+                    email = it
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
+                label = { Text(text = "Email") },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Email, contentDescription = "email")
+                },
+            )
 
-        Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-        RegisterOutlinedText(
-            value = password,
-            onValueChanged = {
-                password = it
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next
-            ),
-            label = { Text(text = "Password") },
-            leadingIcon = {
-                Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_password), contentDescription = "password")
-            },
-            trailingIcon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_eye),
-                    contentDescription = "show password",
-                    modifier = Modifier.clickable {
-                        showPassword = !showPassword
-                    }
-                )
-            },
-            applyVisualTransformation = !showPassword
-        )
+            RegisterOutlinedText(
+                value = password,
+                onValueChanged = {
+                    password = it
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
+                label = { Text(text = "Password") },
+                leadingIcon = {
+                    Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_password), contentDescription = "password")
+                },
+                trailingIcon = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_eye),
+                        contentDescription = "show password",
+                        modifier = Modifier.clickable {
+                            showPassword = !showPassword
+                        }
+                    )
+                },
+                applyVisualTransformation = !showPassword
+            )
 
-        Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = {
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                viewModel?.signIn(email = email, password = password)
-            }
-        }) {
-            Text(text = "Sign In")
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = "Don't have an account? Sign up",
-            color = Color.Gray,
-            modifier = Modifier
-                .clickable {
-                    navController?.navigate(Screen.SignUp.route)
+            Button(onClick = {
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    viewModel?.signIn(email = email, password = password)
                 }
-        )
+            }) {
+                Text(text = "Sign In")
+            }
 
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "Don't have an account? Sign up",
+                color = Color.Gray,
+                modifier = Modifier
+                    .clickable {
+                        navController?.navigate(Screen.SignUp.route)
+                    }
+            )
+
+            if (uiState?.value?.error?.isNotEmpty() == true) {
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    text = uiState.value.error ?: "error logging in",
+                    color = Color.Red
+                )
+            }
+
+
+        }
         if (uiState?.value?.loading == true) {
             Box(
                 Modifier
@@ -177,14 +192,9 @@ fun SignInScreen(
                 )
             }
         }
-        if (uiState?.value?.error?.isNotEmpty() == true) {
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = uiState.value.error ?: "error logging in",
-                color = Color.Red
-            )
-        }
+
     }
+
 }
 
 @Preview(showBackground = true)

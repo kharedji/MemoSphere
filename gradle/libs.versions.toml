@@ -48,7 +48,9 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 analytics = { group = "com.google.firebase", name = "firebase-analytics"}
 auth = { group = "com.google.firebase", name = "firebase-auth"}
 firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx"}
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage-ktx"}
 imagePicker = { group = "com.github.dhaval2404", name = "imagepicker", version = "2.1" }
+glide = { group = "com.github.bumptech.glide", name = "compose", version = "1.0.0-beta01" }
 
 
 [plugins]

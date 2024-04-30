@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.analytics)
     implementation(libs.auth)
     implementation(libs.firestore)
+    implementation(libs.firebase.storage)
 
     //Hilt
     implementation(libs.hilt)
@@ -96,6 +97,9 @@ dependencies {
 
     //Image Picker
     implementation(libs.imagePicker)
+
+    //Glide
+    implementation(libs.glide)
 }
 
 hilt {

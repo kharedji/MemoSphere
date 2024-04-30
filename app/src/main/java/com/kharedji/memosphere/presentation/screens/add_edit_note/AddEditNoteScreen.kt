@@ -23,9 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kharedji.memosphere.presentation.screens.add_edit_note.components.TransparentHintTextField
 import kotlinx.coroutines.flow.collectLatest
@@ -37,7 +35,8 @@ import com.kharedji.memosphere.domain.models.notes.Note
 fun AddEditNoteScreen(
     navController: NavController,
     noteColor: Int,
-    viewModel: AddEditNoteViewModel? = null
+    viewModel: AddEditNoteViewModel? = null,
+    paddingValues: PaddingValues
 ) {
     val titleState = viewModel?.noteTitle?.value
     val contentState = viewModel?.noteContent?.value
@@ -66,6 +65,7 @@ fun AddEditNoteScreen(
     }
 
     Scaffold(
+        modifier = Modifier.padding(paddingValues = paddingValues),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -83,6 +83,7 @@ fun AddEditNoteScreen(
                 .fillMaxSize()
                 .background(noteBackgroundAnimatable?.value!!)
                 .padding(it)
+                .padding(16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -144,7 +145,7 @@ fun AddEditNoteScreen(
                     viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
                 },
                 isHintVisible = contentState.isHintVisible,
-                textStyle = MaterialTheme.typography.bodySmall,
+                textStyle = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.fillMaxHeight()
             )
         }

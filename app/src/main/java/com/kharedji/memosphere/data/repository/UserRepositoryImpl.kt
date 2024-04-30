@@ -5,6 +5,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.kharedji.memosphere.data.data_source.user.UserDao
 import com.kharedji.memosphere.data.utils.State
 import com.kharedji.memosphere.domain.models.user.User
@@ -21,6 +22,9 @@ class UserRepositoryImpl(
     override val auth = Firebase.auth
     override val firestore: FirebaseFirestore
         get() = FirebaseFirestore.getInstance()
+
+    override val storageRef: FirebaseStorage
+        get() = FirebaseStorage.getInstance()
 
     /**
      * Sign up user with email and password
@@ -63,6 +67,14 @@ class UserRepositoryImpl(
     }
 
     /**
+     * Delete user information from the database
+     * @param user
+     */
+    override suspend fun deleteUser() {
+        userDao.deleteUser()
+    }
+
+    /**
      * Get user information from the database
      * @return Flow<User>
      */
@@ -70,6 +82,10 @@ class UserRepositoryImpl(
         return userDao.getUser()
     }
 
+    /**
+     * Add user to Firestore
+     * @return CollectionReference
+     */
     override suspend fun addUserToFirestore(): CollectionReference {
            return firestore.collection("users")
     }

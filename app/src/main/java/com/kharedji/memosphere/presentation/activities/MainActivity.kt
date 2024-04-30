@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -24,6 +25,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,11 +33,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kharedji.memosphere.R
 import com.kharedji.memosphere.navigation.Navigation
+import com.kharedji.memosphere.navigation.Screen
+import com.kharedji.memosphere.presentation.activities.view_models.MainViewModel
+import com.kharedji.memosphere.presentation.components.DrawerContent
 import com.kharedji.memosphere.ui.theme.MemoSphereTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -52,7 +57,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    val mainViewModel: MainViewModel = hiltViewModel()
+                    MainScreen(mainViewModel)
                 }
             }
         }
@@ -60,7 +66,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(mainViewModel: MainViewModel? = null) {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -69,9 +75,13 @@ fun MainScreen() {
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(
-                drawerContainerColor = Color.White
             ) {
-                //TODO: Create drawer content
+                DrawerContent(
+                    navController = navController,
+                    drawerState = drawerState,
+                    coroutineScope = coroutineScope,
+                    mainViewModel = mainViewModel
+                )
             }
         }
     ) {
@@ -90,6 +100,8 @@ fun MainScaffold(
     coroutineScope: CoroutineScope,
     navController: NavHostController
 ) {
+    val backStackEntry =
+        navController.currentBackStackEntryFlow.collectAsState(navController.currentBackStackEntry)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -112,15 +124,41 @@ fun MainScaffold(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        coroutineScope.launch {
-                            drawerState.open()
+                    backStackEntry.value?.destination?.route?.let {
+                        when (it) {
+                            Screen.Main.route -> {
+                                IconButton(onClick = {
+                                    coroutineScope.launch {
+                                        drawerState.open()
+                                    }
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Menu,
+                                        contentDescription = "drawer icon"
+                                    )
+                                }
+                            }
+
+                            Screen.SignIn.route -> {
+
+                            }
+
+                            Screen.SignUp.route -> {
+
+                            }
+
+                            else -> {
+                                IconButton(onClick = {
+                                    navController.navigateUp()
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.ArrowBack,
+                                        contentDescription = "back arrow"
+                                    )
+                                }
+                            }
                         }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "drawer icon"
-                        )
+
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
