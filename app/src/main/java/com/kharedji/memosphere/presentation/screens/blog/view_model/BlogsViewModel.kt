@@ -26,9 +26,37 @@ class BlogsViewModel @Inject constructor(
                         _blogState.value = BlogsState(error = error.message ?: "An unknown error occurred")
                     } else {
                         val blogs = value?.toObjects(Blog::class.java)
-                        _blogState.value = BlogsState(blogs = blogs ?: emptyList())
+                        _blogState.value = BlogsState(blogs = blogs?.sortedByDescending { it.timestamp } ?: emptyList())
                     }
                 }
         }
+    }
+
+    fun likeBlog(blog: Blog) {
+
+        if (blog.likedByCurrentUser){
+            blogsRepository.firestore.collection("blogs").document(blog.postId)
+                .update("likes", blog.likes + 1)
+                .addOnSuccessListener {
+//                    getBlogs()
+                }
+                .addOnFailureListener {
+                    _blogState.value = BlogsState(error = it.message ?: "An unknown error occurred")
+                }
+
+        } else {
+            blogsRepository.firestore.collection("blogs").document(blog.postId)
+                .update("likes", blog.likes - 1)
+                .addOnSuccessListener {
+//                    getBlogs()
+                }
+                .addOnFailureListener {
+                    _blogState.value = BlogsState(error = it.message ?: "An unknown error occurred")
+                }
+        }
+    }
+
+    fun updateBlogsState(updatedBlogs: List<Blog>) {
+        _blogState.value = _blogState.value.copy(blogs = updatedBlogs)
     }
 }

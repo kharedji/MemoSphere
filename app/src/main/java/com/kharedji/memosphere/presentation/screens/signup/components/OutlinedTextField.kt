@@ -38,6 +38,7 @@ fun RegisterOutlinedText(
         onValueChange = onValueChanged,
         keyboardOptions = keyboardOptions,
         label = label,
+        maxLines = 1,
         placeholder = placeholder ,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,

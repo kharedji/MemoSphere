@@ -9,7 +9,9 @@ class AddBlog(
 ) {
 
         operator fun invoke(blog:Blog, callBack: (Resource<Boolean>) -> Unit) {
-            repository.addBlog().document().set(blog)
+            val postId = repository.addBlog().document().id
+            val newBlog = blog.copy(postId = postId)
+            repository.addBlog().document(postId).set(newBlog)
                 .addOnSuccessListener {
                     callBack(Resource.Success(true))
                 }

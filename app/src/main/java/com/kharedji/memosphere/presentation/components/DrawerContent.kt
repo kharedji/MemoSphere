@@ -24,6 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -104,6 +106,29 @@ fun DrawerContent(
                 )
                 Text(
                     text = "Profile",
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(start = 10.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(30.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .clickable {
+                        navController.navigate(Screen.Main.route)
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_feed),
+                    contentDescription = "blog",
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = "Blogs",
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(start = 10.dp)
                 )

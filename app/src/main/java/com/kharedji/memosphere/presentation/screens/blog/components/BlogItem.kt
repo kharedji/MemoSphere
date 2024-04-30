@@ -1,5 +1,6 @@
 package com.kharedji.memosphere.presentation.screens.blog.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,14 +10,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -30,7 +39,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun BlogItem(blog: Blog) {
+fun BlogItem(blog: Blog, onLike: () -> Unit ) {
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -59,8 +68,30 @@ fun BlogItem(blog: Blog) {
                     text = blog.username
                 )
                 Text(
-                    text = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(Date(blog.timestamp))
+                    text = SimpleDateFormat(
+                        "dd/MM/yyyy",
+                        Locale.ENGLISH
+                    ).format(Date(blog.timestamp))
                 )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                IconButton(onClick = { onLike() }) {
+                    Icon(
+                        imageVector = if(blog.likedByCurrentUser) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = "like",
+                        tint = Color.Red,
+                        )
+                }
+                Text(
+                    text = blog.likes.toString(),
+                    textAlign = TextAlign.Center
+                )
+
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -70,7 +101,7 @@ fun BlogItem(blog: Blog) {
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-        if(blog.imageUrl.isNotEmpty()){
+        if (blog.imageUrl.isNotEmpty()) {
             Spacer(modifier = Modifier.height(10.dp))
             GlideImage(
                 model = blog.imageUrl,
@@ -96,13 +127,15 @@ fun BlogItem(blog: Blog) {
 fun BlogItemPreview() {
     BlogItem(
         Blog(
-        title = "Title",
-        content = "Content",
-        username = "Username",
-        avatarUrl = "AvatarUrl",
-        imageUrl = "ImageUrl",
-        timestamp = 1714308200166,
-        uid = "Uid"
-    )
-    )
+            postId = "PostId",
+            title = "Title",
+            content = "Content",
+            username = "Username",
+            avatarUrl = "AvatarUrl",
+            imageUrl = "ImageUrl",
+            timestamp = 1714308200166,
+            likes = 0,
+            uid = "Uid"
+        )
+    ){}
 }

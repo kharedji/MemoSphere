@@ -1,6 +1,7 @@
 package com.kharedji.memosphere.presentation.screens.blog
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -52,57 +53,42 @@ fun BlogsScreen(
             }
         }
     ) {
-        val blogList = listOf(
-            Blog(
-                title = "Title",
-                username = "John Doe",
-                avatarUrl = "https://randomuser.me/api/portraits",
-                content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                imageUrl = "https://picsum.photos/200/300",
-                timestamp = System.currentTimeMillis(),
-                uid = "1"
-            ),
-            Blog(
-                title = "Title",
-                username = "John Doe",
-                avatarUrl = "https://randomuser.me/api/portraits",
-                content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                imageUrl = "https://picsum.photos/200/300",
-                timestamp = System.currentTimeMillis(),
-                uid = "2"
-            ),
-            Blog(
-                title = "Title",
-                username = "John Doe",
-                avatarUrl = "https://randomuser.me/api/portraits",
-                content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                imageUrl = "https://picsum.photos/200/300",
-                timestamp = System.currentTimeMillis(),
-                uid = "3"
-            ),
 
-        )
         if (blogsState.value.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(16.dp)
-            )
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .padding(16.dp)
+                )
+            }
         }
         if (blogsState.value.blogs.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it),
-                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 LazyColumn {
                     items(blogsState.value.blogs) { blog ->
-                        BlogItem(blog = blog)
+                        BlogItem(blog = blog){
+                            // update the blogs state list with the new liked blog
+                            val updatedBlogs = blogsState.value.blogs.toMutableList()
+                            val blogIndex = updatedBlogs.indexOfFirst { it.postId == blog.postId }
+                            if (blogIndex != -1) {
+                                updatedBlogs[blogIndex] = blog
+                                blogsViewModel.updateBlogsState(updatedBlogs)
+                            }
+                            blogsViewModel.likeBlog(blog.copy(likedByCurrentUser = !blog.likedByCurrentUser))
+                        }
                     }
                 }
+            }
+        } else {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = "No blogs found")
             }
         }
 
